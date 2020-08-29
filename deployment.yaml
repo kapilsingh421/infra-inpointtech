@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recordingvpe
+  labels:
+    app: recordingvpe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: recordingvpe
+  template:
+    metadata:
+      name: recordingvpe
+      labels:
+        app: recordingvpe
+    spec:
+      nodeSelector:
+        nvidia.com/gpu: "recording_vpe"
+      tolerations:
+      - key: "nvidia.com/gpu"
+        operator: "Exists"
+        effect: "NoSchedule"
+      containers:
+      - name: recordingvpe
+        image: 129065198581.dkr.ecr.ap-south-1.amazonaws.com/recording_vpe:latest
+        ports:
+        - containerPort: 8000
+        imagePullPolicy: Always
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: processingvpe
+  labels:
+    app: processingvpe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: processingvpe
+  template:
+    metadata:
+      name: processingvpe
+      labels:
+        app: processingvpe
+    spec:
+      nodeSelector:
+        nvidia.com/gpu: "proceessing_vpe"
+      tolerations:
+      - key: "nvidia.com/gpu"
+        operator: "Exists"
+        effect: "NoSchedule"
+      containers:
+      - name: processingvpe
+        image: 129065198581.dkr.ecr.ap-south-1.amazonaws.com/processing_vpe:latest
+        ports:
+        - containerPort: 8000
+        imagePullPolicy: Always
+        resources:
+          limits:
+            nvidia.com/gpu: 1

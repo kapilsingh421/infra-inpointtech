@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "recording-service"
+spec:
+  ports:
+    - port: 80
+      targetPort: 8000
+      protocol: TCP
+  type: NodePort
+  selector:
+    app: "recordingvpe"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "processing-service"
+spec:
+  ports:
+    - port: 80
+      targetPort: 8000
+      protocol: TCP
+  type: NodePort
+  selector:
+    app: "processingvpe"
+

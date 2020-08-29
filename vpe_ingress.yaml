@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: collective-intel-ingress
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+spec:
+  rules:
+  - host: processing.collective-intel.com
+    http:
+      paths:
+      - backend:
+          serviceName: processing-service
+          servicePort: 80
+  - host: recording.collective-intel.com
+    http:
+      paths:
+      - backend:
+          serviceName: recording-service
+          servicePort: 80 

@@ -1,0 +1,59 @@
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: vpe
+  region: ap-south-1                               
+nodeGroups:
+  - name: gpu-pool-recording
+    instanceType: g4dn.xlarge # Customizable. The instance type for the node pool
+    volumeSize: 1000 # Required. The disk size for the nodes.
+    minSize: 1 # Customizable. The minimum amount of nodes to auto scale down to.
+    maxSize: 2 # Customizable. The maximum amount of nodes to auto scale up to.
+    desiredCapacity: 1 # Customizable. The initial amount of nodes to have live.
+    ssh: # use existing EC2 key
+      publicKeyName: Collective-Intel
+    iam:
+      attachPolicyARNs:
+        - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly 
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+      withAddonPolicies: 
+        autoScaler: true # Required.
+        imageBuilder: true # Required.
+        ebs: true
+        albIngress: true
+    privateNetworking: true # Required.
+    taints: 
+      nvidia.com/gpu: "present:NoSchedule" # Required.
+    tags:
+      k8s.io/cluster-autoscaler/enabled: 'true' # Required.
+      accelerator: 'nvidia' # Required.
+  - name: gpu-pool-process
+    instanceType: g4dn.xlarge # Customizable. The instance type for the node pool
+    volumeSize: 1000 # Required. The disk size for the nodes.
+    minSize: 1 # Customizable. The minimum amount of nodes to auto scale down to.
+    maxSize: 2 # Customizable. The maximum amount of nodes to auto scale up to.
+    desiredCapacity: 1 # Customizable. The initial amount of nodes to have live.
+    ssh: # use existing EC2 key
+      publicKeyName: Collective-Intel
+    iam:
+      attachPolicyARNs:
+        - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly 
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+      withAddonPolicies: 
+        autoScaler: true # Required.
+        imageBuilder: true # Required.
+        ebs: true
+        albIngress: true
+    privateNetworking: true # Required.
+    taints: 
+      nvidia.com/gpu: "present:NoSchedule" # Required.
+    tags:
+      k8s.io/cluster-autoscaler/enabled: 'true' # Required.
+      accelerator: 'nvidia' # Required.   

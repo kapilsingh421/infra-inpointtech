@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: recording
+spec:
+  restartPolicy: OnFailure
+  nodeSelector:
+    nvidia.com/gpu: "true"
+  tolerations:
+  - key: "nvidia.com/gpu"
+    operator: "Exists"
+    effect: "NoSchedule"
+  containers:
+  - name: recording
+    image: 129065198581.dkr.ecr.ap-south-1.amazonaws.com/recording_vpe:latest
+    ports:
+    - containerPort: 8000
+    resources:
+      limits:
+        nvidia.com/gpu: 1
