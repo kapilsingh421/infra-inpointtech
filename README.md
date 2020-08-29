@@ -1,2 +1,2 @@
 # infra-inpointtech
-Terraform to create infrastructure 
+EKCTL to create infrastructure on AWS EKS
